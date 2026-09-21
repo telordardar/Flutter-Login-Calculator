@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'component/custom_textfield.dart';
 import 'component/custom_button.dart';
+import 'login_page.dart';
 
 class CalculatorPage extends StatefulWidget {
   const CalculatorPage({super.key});
@@ -38,12 +39,21 @@ class _CalculatorPageState extends State<CalculatorPage> {
       appBar: AppBar(
         title: const Text('Kalkulator Sederhana'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // (Opsional) Anda juga bisa menambahkan tombol kembali di sudut kiri atas AppBar:
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+            );
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-
             CustomTextField(
               txtController: _angka1Controller,
               hint: 'Angka Pertama',
@@ -74,6 +84,23 @@ class _CalculatorPageState extends State<CalculatorPage> {
             Text(
               _hasil.toString(),
               style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            ),
+            
+            const Spacer(), // Mendorong tombol kembali ke bagian paling bawah layar
+            
+            // Tombol Kembali di bagian bawah
+            SizedBox(
+              width: double.infinity, // Membuat tombol melebar penuh
+              child: CustomButton(
+                text: 'Kembali ke Login',
+                onPressed: () {
+                  // Fungsi untuk kembali ke halaman login
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                },
+              ),
             ),
           ],
         ),

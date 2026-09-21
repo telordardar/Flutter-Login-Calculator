@@ -75,13 +75,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
               
               const SizedBox(width: 10),
-              
-              CustomButton(
-                text: "Register",
-                onPressed: () {
-                  print("Tombol register ditekan");
-                },
-              ),
             ],
           ),
         ],
