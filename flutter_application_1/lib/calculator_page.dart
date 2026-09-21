@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'component/custom_textfield.dart';
 import 'component/custom_button.dart';
-import 'login_page.dart';
+import 'component/custom_textview.dart'; 
+import 'login_page.dart'; 
 
 class CalculatorPage extends StatefulWidget {
   const CalculatorPage({super.key});
@@ -39,7 +40,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
       appBar: AppBar(
         title: const Text('Kalkulator Sederhana'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // (Opsional) Anda juga bisa menambahkan tombol kembali di sudut kiri atas AppBar:
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -77,24 +77,24 @@ class _CalculatorPageState extends State<CalculatorPage> {
             ),
             const SizedBox(height: 32),
             
-            const Text(
-              'Hasil:',
-              style: TextStyle(fontSize: 20),
+            const CustomText(
+              text: 'Hasil:',
+              fontSize: 20,
+              color: Colors.black,
             ),
-            Text(
-              _hasil.toString(),
-              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            CustomText(
+              text: _hasil.toString(),
+              fontSize: 32,
+              color: Colors.black,
             ),
             
-            const Spacer(), // Mendorong tombol kembali ke bagian paling bawah layar
+            const Spacer(), 
             
-            // Tombol Kembali di bagian bawah
             SizedBox(
-              width: double.infinity, // Membuat tombol melebar penuh
+              width: double.infinity, 
               child: CustomButton(
                 text: 'Kembali ke Login',
                 onPressed: () {
-                  // Fungsi untuk kembali ke halaman login
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => const LoginPage()),
