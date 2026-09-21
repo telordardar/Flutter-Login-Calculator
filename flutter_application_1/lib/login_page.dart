@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'component/custom_textfield.dart'; 
 import 'component/custom_button.dart';   
+import 'calculator_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -51,17 +52,25 @@ class _LoginPageState extends State<LoginPage> {
               CustomButton(
                 text: "Login",
                 onPressed: () {
-                  setState(() {
-                    String username = txtUsername.text;
-                    String password = txtPassword.text;
-                    if (username == "admin" && password == "admin") {
-                      print("sukses login");
+                  String username = txtUsername.text;
+                  String password = txtPassword.text;
+                  
+                  if (username == "admin" && password == "admin") {
+                    setState(() {
                       statusLogin = "admin";
-                    } else {
-                      print("gagal login");
+                    });
+                    print("sukses login");
+                    
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const CalculatorPage()),
+                    );
+                  } else {
+                    setState(() {
                       statusLogin = "failed";
-                    }
-                  });
+                    });
+                    print("gagal login");
+                  }
                 },
               ),
               
