@@ -1,105 +1,131 @@
 import 'package:flutter/material.dart';
-import 'component/custom_textfield.dart';
-import 'component/custom_button.dart';
-import 'component/custom_textview.dart'; 
-import 'login_page.dart'; 
+import 'package:flutter_application_1/component/custom_textfield.dart';
+import 'package:flutter_application_1/component/custom_button.dart';
+import 'package:flutter_application_1/component/custom_controller.dart';
+import 'package:get/get.dart';
 
-class CalculatorPage extends StatefulWidget {
-  const CalculatorPage({super.key});
+class CalculatorPage extends StatelessWidget {
+  CalculatorPage({super.key});
 
-  @override
-  State<CalculatorPage> createState() => _CalculatorPageState();
-}
+  final controller = Get.put(KalkulatorController());
+  
+  final TextEditingController txtAngka1 = TextEditingController();
+  final TextEditingController txtAngka2 = TextEditingController();
 
-class _CalculatorPageState extends State<CalculatorPage> {
-  final TextEditingController _angka1Controller = TextEditingController();
-  final TextEditingController _angka2Controller = TextEditingController();
+  void _prosesHitung(String jenisOperasi) {
+    String teksAngka1 = txtAngka1.text.trim();
+    String teksAngka2 = txtAngka2.text.trim();
 
-  double _hasil = 0;
+    if (teksAngka1.isEmpty || teksAngka2.isEmpty) {
+      Get.snackbar(
+        "Peringatan", 
+        "Angka 1 dan Angka 2 tidak boleh kosong!",
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+      );
+      return;
+    }
 
-  void _hitung(String operasi) {
-    double angka1 = double.tryParse(_angka1Controller.text) ?? 0;
-    double angka2 = double.tryParse(_angka2Controller.text) ?? 0;
+    double? angka1 = double.tryParse(teksAngka1);
+    double? angka2 = double.tryParse(teksAngka2);
 
-    setState(() {
-      if (operasi == '+') {
-        _hasil = angka1 + angka2;
-      } else if (operasi == '-') {
-        _hasil = angka1 - angka2;
-      } else if (operasi == '*') {
-        _hasil = angka1 * angka2;
-      } else if (operasi == '/') {
-        _hasil = angka2 != 0 ? angka1 / angka2 : 0; 
-      }
-    });
+    if (angka1 == null || angka2 == null) {
+      Get.snackbar(
+        "Peringatan", 
+        "Input harus berupa angka (Numeric Only)!",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    if (jenisOperasi == 'bagi' && angka2 == 0) {
+      Get.snackbar(
+        "Error", 
+        "Angka 2 tidak boleh 0 untuk operasi pembagian!",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    if (jenisOperasi == 'tambah') controller.tambah(angka1, angka2);
+    if (jenisOperasi == 'kurang') controller.kurang(angka1, angka2);
+    if (jenisOperasi == 'kali') controller.kali(angka1, angka2);
+    if (jenisOperasi == 'bagi') controller.bagi(angka1, angka2);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Kalkulator Sederhana'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginPage()),
-            );
-          },
-        ),
+        title: const Text("Kalkulator"),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             CustomTextField(
-              txtController: _angka1Controller,
-              hint: 'Angka Pertama',
+              txtController: txtAngka1, 
+              hint: "Input angka 1",
+              isNumeric: true, // Mengaktifkan mode angka
             ),
             const SizedBox(height: 16),
-            
             CustomTextField(
-              txtController: _angka2Controller,
-              hint: 'Angka Kedua',
+              txtController: txtAngka2, 
+              hint: "Input angka 2",
+              isNumeric: true, // Mengaktifkan mode angka
             ),
             const SizedBox(height: 24),
-            
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CustomButton(text: '+', onPressed: () => _hitung('+')),
-                CustomButton(text: '-', onPressed: () => _hitung('-')),
-                CustomButton(text: 'x', onPressed: () => _hitung('*')),
-                CustomButton(text: '/', onPressed: () => _hitung('/')),
+                Expanded(
+                  child: CustomButton(
+                    text: "Tambah",
+                    onPressed: () => _prosesHitung('tambah'),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: CustomButton(
+                    text: "Kurang",
+                    onPressed: () => _prosesHitung('kurang'),
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 32),
-            
-            const CustomText(
-              text: 'Hasil:',
-              fontSize: 20,
-              color: Colors.black,
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    text: "Kali",
+                    onPressed: () => _prosesHitung('kali'),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: CustomButton(
+                    text: "Bagi",
+                    onPressed: () => _prosesHitung('bagi'),
+                  ),
+                ),
+              ],
             ),
-            CustomText(
-              text: _hasil.toString(),
-              fontSize: 32,
-              color: Colors.black,
+            const SizedBox(height: 40),
+            const Text(
+              "Hasil:", 
+              style: TextStyle(fontSize: 18),
             ),
-            
-            const Spacer(), 
-            
-            SizedBox(
-              width: double.infinity, 
-              child: CustomButton(
-                text: 'Kembali ke Login',
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                },
+            Obx(
+              () => Text(
+                controller.hasilhitung.value.toString(),
+                style: const TextStyle(
+                  fontSize: 40, 
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple,
+                ),
               ),
             ),
           ],

@@ -3,6 +3,7 @@ import 'component/custom_textfield.dart';
 import 'component/custom_button.dart';
 import 'component/custom_textview.dart';   
 import 'calculator_page.dart'; 
+import 'registration_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,18 +15,12 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController txtUsername = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
-  
-  String errorMessage = ""; 
 
   void _prosesLogin() {
     String username = txtUsername.text;
     String password = txtPassword.text;
 
     if (username == "admin" && password == "admin") {
-      setState(() {
-        errorMessage = ""; 
-      });
-      
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Berhasil masuk!"),
@@ -36,12 +31,17 @@ class _LoginPageState extends State<LoginPage> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const CalculatorPage()),
+        MaterialPageRoute(builder: (context) => CalculatorPage()),
       );
     } else {
-      setState(() {
-        errorMessage = "Username atau password salah!";
-      });
+      // Peringatan error diganti menggunakan SnackBar
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Username atau password salah!"),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 
@@ -63,13 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch, 
                 children: [
-                  const Icon(
-                    Icons.lock_person,
-                    size: 80,
-                    color: Colors.deepPurple,
-                  ),
                   const SizedBox(height: 16),
-                  
                   const Center(
                     child: CustomText(
                       text: "Welcome to Application",
@@ -77,19 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                       color: Colors.deepPurple,
                     ),
                   ),
-                  const SizedBox(height: 20),
-
-                  if (errorMessage.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Center(
-                        child: CustomText(
-                          text: errorMessage,
-                          fontSize: 14,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ),
+                  const SizedBox(height: 40),
 
                   CustomTextField(
                     txtController: txtUsername,
@@ -112,6 +94,18 @@ class _LoginPageState extends State<LoginPage> {
                   CustomButton(
                     text: "Login",
                     onPressed: _prosesLogin,
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // Tombol registrasi menggunakan CustomButton
+                  CustomButton(
+                    text: "Daftar Akun Baru",
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const RegistrationPage()),
+                      );
+                    },
                   ),
                 ],
               ),
