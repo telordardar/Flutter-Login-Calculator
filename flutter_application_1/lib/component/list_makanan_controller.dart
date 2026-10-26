@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:flutter_application_1/models/makanan_models.dart';
+
 class ListMakananController extends GetxController {
-  List<MakananModels> listMakanan = [
-    // ← MakananModels
+  var listMakanan = <MakananModels>[
     MakananModels(
       namaMakanan: "Nasi Goreng",
       harga: "15000",
@@ -43,5 +43,5 @@ class ListMakananController extends GetxController {
       review: "Pedasnya pas, bikin nagih!",
       gambar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpHShj59W1dpTt_z78M87bGSsBKgoJHI2G6bPk8pITG6fD6FavWZly9IM&s=10",
     ),
-  ];
+  ].obs; 
 }
